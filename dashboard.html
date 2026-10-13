@@ -1,0 +1,70 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>College Portal Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .dashboard {
+            background: white;
+            padding: 35px;
+            width: 380px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .dashboard h1 {
+            margin-bottom: 20px;
+        }
+
+        .dashboard p {
+            margin: 12px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <h1 id="heading">Dashboard</h1>
+        <p id="welcome"></p>
+        <p id="details"></p>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        const user = JSON.parse(
+            localStorage.getItem("loggedInUser") || "null"
+        );
+
+        const params = new URLSearchParams(
+            window.location.search
+        );
+
+        const role = params.get("role");
+
+        if (!user || user.role !== role ||
+            !["admin", "student"].includes(role)) {
+            window.location.href = "index.html";
+        } else {
+            document.getElementById("heading").textContent =
+                role === "admin"
+                    ? "Admin Dashboard"
+                    : "Student Dashboard";
+
+            document.getElementById("welcome").textContent =
+                "Welcome, " + user.username + "!";
+
+            document.getElementById("details").textContent =
+                role === "admin"
+                    ? "Manage students and college records."
+                    : "View your profile and academic details.";
+        }
+
+        function logout() {
+            localStorage.removeItem("loggedInUser");
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
